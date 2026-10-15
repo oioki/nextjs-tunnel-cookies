@@ -1,0 +1,21 @@
+{
+  "name": "nextjs-tunnel-cookies",
+  "private": true,
+  "scripts": {
+    "echo": "node echo-server.js",
+    "dev": "_SENTRY_TUNNEL_DESTINATION_OVERRIDE=http://localhost:3113/ next dev -p 3112",
+    "build": "_SENTRY_TUNNEL_DESTINATION_OVERRIDE=http://localhost:3113/ next build",
+    "start": "next start -p 3112"
+  },
+  "dependencies": {
+    "@sentry/nextjs": "10.75.0",
+    "next": "15.5.25",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "typescript": "^5"
+  }
+}
