@@ -1,5 +1,7 @@
 # nextjs-tunnel-cookies
 
+This branch is variant A: the SDK default (no `credentials: 'omit'`, no tunnel handler) behind Deployment Protection.
+
 Next.js app with `@sentry/nextjs` and `tunnelRoute: true`, demonstrating that the browser SDK
 forwards first-party cookies (including an `httpOnly` session cookie) to the Sentry tunnel
 destination with every envelope.
