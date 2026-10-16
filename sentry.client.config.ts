@@ -8,5 +8,5 @@ Sentry.init({
   // Client-side workaround for the cookie forwarding, enabled on the `protected-credentials-omit`
   // branch: keeps first-party cookies off the same-origin tunnel request. Breaks event delivery on
   // cookie-gated deployments (Vercel Deployment Protection, Cloudflare Access, auth middleware).
-  // transportOptions: { fetchOptions: { credentials: 'omit' } },
+  transportOptions: { fetchOptions: { credentials: 'omit' } },
 });
