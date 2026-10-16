@@ -32,18 +32,18 @@ unless `TUNNEL_DESTINATION` is set in the project's environment variables.
 The workaround below is enabled by default. Comment out the `transportOptions` line in
 `sentry.client.config.ts` and rebuild to see the leak.
 
-1. Open http://localhost:3112 and click **Log in** - this sets an `httpOnly` `session` cookie.
+1. Open http://localhost:3112 and click **Log in** - this sets an `httpOnly` `app_session` cookie.
 2. Reload the page, or click **Send a test error through the tunnel**.
 3. In DevTools, open the tunnel request (`/<random>?o=4506&p=4507&r=us`). Its response lists the
    headers the destination received, including:
 
    ```
-   "Cookie": "session=sess_demo_s3cr3t_token"
+   "Cookie": "app_session=sess_demo_s3cr3t_token"
    ```
 
    With the local echo server, terminal 1 prints the same `Cookie:` line instead.
 
-The `session` cookie reaches the tunnel destination even though it is `httpOnly` and cannot be read
+The `app_session` cookie reaches the tunnel destination even though it is `httpOnly` and cannot be read
 from JavaScript: the browser attaches it automatically because the tunnel route is same-origin.
 
 ## Workaround

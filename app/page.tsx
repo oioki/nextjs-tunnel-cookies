@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ThrowButton } from './ThrowButton';
 
 export default async function Home() {
-  const session = (await cookies()).get('session');
+  const session = (await cookies()).get('app_session');
 
   return (
     <main style={{ fontFamily: 'sans-serif', maxWidth: 680, margin: '40px auto', lineHeight: 1.6 }}>
@@ -24,7 +24,7 @@ export default async function Home() {
 
       <p>
         The browser SDK POSTs every envelope to the same-origin tunnel route, so the browser attaches
-        the <code>session</code> cookie - even though it is <code>httpOnly</code> and unreadable from
+        the <code>app_session</code> cookie - even though it is <code>httpOnly</code> and unreadable from
         JavaScript. Next.js then rewrites the request to the tunnel destination with the headers intact.
       </p>
       <p>
