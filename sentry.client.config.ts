@@ -6,7 +6,7 @@ Sentry.init({
   tracesSampleRate: 1.0,
 
   // Temporary workaround for the cookie forwarding until the SDK defaults to it: keeps first-party
-  // cookies off the same-origin tunnel request, so the echo server's `Cookie:` line shows `(none)`.
+  // cookies off the same-origin tunnel request, so the echoed headers contain no `Cookie`.
   // Comment it out to reproduce the leak. Breaks event delivery on cookie-gated deployments
   // (Vercel Deployment Protection, Cloudflare Access, HTTP Basic Auth, auth middleware).
   transportOptions: { fetchOptions: { credentials: 'omit' } },

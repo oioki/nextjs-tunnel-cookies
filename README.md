@@ -4,21 +4,28 @@ Next.js app with `@sentry/nextjs` and `tunnelRoute: true`, demonstrating that th
 forwards first-party cookies (including an `httpOnly` session cookie) to the Sentry tunnel
 destination with every envelope.
 
-The tunnel destination is overridden to a local echo server, so you can see the forwarded headers
-directly instead of inspecting Sentry's ingest.
+The tunnel destination is overridden at build time to a header echo endpoint
+(`https://dev.oioki.me/headers/`), so you can see the forwarded headers directly instead of
+inspecting Sentry's ingest. The echo comes back as the tunnel response: open the tunnel request
+in the browser DevTools Network tab to read it. Set `TUNNEL_DESTINATION` to use another endpoint.
 
 ## Run
 
 ```sh
 npm install
-
-# terminal 1 - the stand-in for Sentry ingest
-npm run echo            # listens on http://localhost:3113
-
-# terminal 2 - the app (override is baked into the build/dev scripts)
 npm run build && npm run start   # http://localhost:3112
 # or: npm run dev
 ```
+
+To use the bundled local echo server instead, which prints each request to the terminal:
+
+```sh
+npm run echo                                              # terminal 1, http://localhost:3113
+TUNNEL_DESTINATION=http://localhost:3113/ npm run dev     # terminal 2
+```
+
+On Vercel the default `build` script is used, so the deployment tunnels to the echo endpoint
+unless `TUNNEL_DESTINATION` is set in the project's environment variables.
 
 ## Reproduce
 
@@ -27,14 +34,14 @@ The workaround below is enabled by default. Comment out the `transportOptions` l
 
 1. Open http://localhost:3112 and click **Log in** - this sets an `httpOnly` `session` cookie.
 2. Reload the page, or click **Send a test error through the tunnel**.
-3. Watch terminal 1. Each tunneled envelope prints a line like:
+3. In DevTools, open the tunnel request (`/<random>?o=4506&p=4507&r=us`). Its response lists the
+   headers the destination received, including:
 
    ```
-   --- tunnel request received ---
-   POST /?o=4506&p=4507&r=us
-   Cookie: session=sess_demo_s3cr3t_token
-   Body: 1234 bytes
+   "Cookie": "session=sess_demo_s3cr3t_token"
    ```
+
+   With the local echo server, terminal 1 prints the same `Cookie:` line instead.
 
 The `session` cookie reaches the tunnel destination even though it is `httpOnly` and cannot be read
 from JavaScript: the browser attaches it automatically because the tunnel route is same-origin.
@@ -48,7 +55,7 @@ defaults to it, set this in `Sentry.init` on the client:
 transportOptions: { fetchOptions: { credentials: 'omit' } },
 ```
 
-With it enabled, the echo server's `Cookie:` line reads `(none)`.
+With it enabled, the echoed headers contain no `Cookie`.
 
 Caveat: on cookie-gated deployments (Vercel Deployment Protection, Cloudflare Access, HTTP Basic
 Auth, auth middleware) the gate rejects the cookie-less tunnel request, so events from those

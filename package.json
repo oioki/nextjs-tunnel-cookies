@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "echo": "node echo-server.js",
-    "dev": "_SENTRY_TUNNEL_DESTINATION_OVERRIDE=http://localhost:3113/ next dev -p 3112",
-    "build": "_SENTRY_TUNNEL_DESTINATION_OVERRIDE=http://localhost:3113/ next build",
+    "dev": "_SENTRY_TUNNEL_DESTINATION_OVERRIDE=${TUNNEL_DESTINATION:-https://dev.oioki.me/headers/} next dev -p 3112",
+    "build": "_SENTRY_TUNNEL_DESTINATION_OVERRIDE=${TUNNEL_DESTINATION:-https://dev.oioki.me/headers/} next build",
     "start": "next start -p 3112"
   },
   "dependencies": {
