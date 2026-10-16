@@ -22,6 +22,9 @@ npm run build && npm run start   # http://localhost:3112
 
 ## Reproduce
 
+The workaround below is enabled by default. Comment out the `transportOptions` line in
+`sentry.client.config.ts` and rebuild to see the leak.
+
 1. Open http://localhost:3112 and click **Log in** - this sets an `httpOnly` `session` cookie.
 2. Reload the page, or click **Send a test error through the tunnel**.
 3. Watch terminal 1. Each tunneled envelope prints a line like:
@@ -36,8 +39,17 @@ npm run build && npm run start   # http://localhost:3112
 The `session` cookie reaches the tunnel destination even though it is `httpOnly` and cannot be read
 from JavaScript: the browser attaches it automatically because the tunnel route is same-origin.
 
-## The fix
+## Workaround
 
-The envelope transport never needs cookies - Sentry authenticates via the DSN. Uncomment the
-`transportOptions.fetchOptions.credentials: 'omit'` line in `sentry.client.config.ts`, rebuild, and
-repeat: the echo server's `Cookie:` line now reads `(none)`. The SDK patch makes `omit` the default.
+The envelope transport never needs cookies - Sentry authenticates via the DSN. Until the SDK
+defaults to it, set this in `Sentry.init` on the client:
+
+```ts
+transportOptions: { fetchOptions: { credentials: 'omit' } },
+```
+
+With it enabled, the echo server's `Cookie:` line reads `(none)`.
+
+Caveat: on cookie-gated deployments (Vercel Deployment Protection, Cloudflare Access, HTTP Basic
+Auth, auth middleware) the gate rejects the cookie-less tunnel request, so events from those
+deployments stop reaching Sentry. The pages themselves keep working.

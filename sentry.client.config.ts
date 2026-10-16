@@ -5,7 +5,9 @@ Sentry.init({
   // Trace every page view so a pageload transaction is tunneled on each load, not only on errors.
   tracesSampleRate: 1.0,
 
-  // Fix / workaround for the cookie forwarding: uncomment to keep first-party cookies off the
-  // tunnel request. The echo server's `Cookie:` line then shows `(none)`.
-  // transportOptions: { fetchOptions: { credentials: 'omit' } },
+  // Temporary workaround for the cookie forwarding until the SDK defaults to it: keeps first-party
+  // cookies off the same-origin tunnel request, so the echo server's `Cookie:` line shows `(none)`.
+  // Comment it out to reproduce the leak. Breaks event delivery on cookie-gated deployments
+  // (Vercel Deployment Protection, Cloudflare Access, HTTP Basic Auth, auth middleware).
+  transportOptions: { fetchOptions: { credentials: 'omit' } },
 });
