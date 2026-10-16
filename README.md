@@ -9,6 +9,22 @@ The tunnel destination is overridden at build time to a header echo endpoint
 inspecting Sentry's ingest. The echo comes back as the tunnel response: open the tunnel request
 in the browser DevTools Network tab to read it. Set `TUNNEL_DESTINATION` to use another endpoint.
 
+## Variants
+
+Each variant is a branch with its own Vercel deployment. The project uses Standard Protection, so
+`main` (production, https://nextjs-tunnel-cookies.vercel.app/) is public and every other branch
+deploys behind Vercel Deployment Protection.
+
+| Variant | Branch | Protection | `credentials: 'omit'` | Server tunnel handler | Events delivered | Cookies forwarded |
+|---|---|---|---|---|---|---|
+| E | `main` | no | no | no | yes | yes (app cookies) |
+| A | `protected-sdk-default` | yes | no | no | yes | yes (app cookies and `_vercel_jwt`) |
+| B | `protected-credentials-omit` | yes | yes | no | no, redirected to Vercel SSO | no |
+| C | `protected-tunnel-handler` | yes | no | yes | yes | no |
+
+The server tunnel handler comes from
+[getsentry/sentry-javascript#25456](https://github.com/getsentry/sentry-javascript/pull/25456).
+
 ## Run
 
 ```sh
@@ -28,9 +44,6 @@ On Vercel the default `build` script is used, so the deployment tunnels to the e
 unless `TUNNEL_DESTINATION` is set in the project's environment variables.
 
 ## Reproduce
-
-The workaround below is enabled by default. Comment out the `transportOptions` line in
-`sentry.client.config.ts` and rebuild to see the leak.
 
 1. Open http://localhost:3112 and click **Log in** - this sets an `httpOnly` `app_session` cookie.
 2. Reload the page, or click **Send a test error through the tunnel**.
