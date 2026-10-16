@@ -25,6 +25,12 @@ deploys behind Vercel Deployment Protection.
 The server tunnel handler comes from
 [getsentry/sentry-javascript#25456](https://github.com/getsentry/sentry-javascript/pull/25456).
 
+On the `protected-tunnel-handler` branch, `app/sentry-tunnel/route.ts` re-sends only the envelope
+from the server, to the DSN's host instead of the rewrite destination. The DSN there points at the
+echo endpoint (`https://<key>@dev.oioki.me/headers/4507`), so the handler posts to
+`https://dev.oioki.me/headers/api/4507/envelope/` and the echo still shows up as the tunnel response.
+That branch installs the PR build from `vendor/` (`@sentry/nextjs` 11.8.0).
+
 ## Run
 
 ```sh

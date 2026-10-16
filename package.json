@@ -8,7 +8,7 @@
     "start": "next start -p 3112"
   },
   "dependencies": {
-    "@sentry/nextjs": "10.75.0",
+    "@sentry/nextjs": "file:vendor/sentry-nextjs-11.8.0-pr25456.tgz",
     "next": "15.5.25",
     "react": "19.1.0",
     "react-dom": "19.1.0"
