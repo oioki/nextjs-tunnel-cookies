@@ -9,5 +9,5 @@ Sentry.init({
   // cookies off the same-origin tunnel request, so the echoed headers contain no `Cookie`.
   // Comment it out to reproduce the leak. Breaks event delivery on cookie-gated deployments
   // (Vercel Deployment Protection, Cloudflare Access, HTTP Basic Auth, auth middleware).
-  transportOptions: { fetchOptions: { credentials: 'omit' } },
+  // transportOptions: { fetchOptions: { credentials: 'omit' } },
 });
