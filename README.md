@@ -22,6 +22,7 @@ deploys behind Vercel Deployment Protection.
 | B | `protected-credentials-omit` | yes | yes | no | no, redirected to Vercel SSO | no |
 | C | `protected-tunnel-handler` | yes | no | yes | yes | no |
 | C (released) | `protected-sdk-11.9.0` | yes | no | yes | yes | no |
+| B (released) | `protected-sdk-11.9.0-no-handler` | yes | yes (SDK default) | no | no, redirected to Vercel SSO | no |
 
 The server tunnel handler comes from
 [getsentry/sentry-javascript#25456](https://github.com/getsentry/sentry-javascript/pull/25456).
