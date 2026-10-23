@@ -21,6 +21,7 @@ deploys behind Vercel Deployment Protection.
 | A | `protected-sdk-default` | yes | no | no | yes | yes (app cookies and `_vercel_jwt`) |
 | B | `protected-credentials-omit` | yes | yes | no | no, redirected to Vercel SSO | no |
 | C | `protected-tunnel-handler` | yes | no | yes | yes | no |
+| C (released) | `protected-sdk-11.9.0` | yes | no | yes | yes | no |
 
 The server tunnel handler comes from
 [getsentry/sentry-javascript#25456](https://github.com/getsentry/sentry-javascript/pull/25456).
@@ -29,7 +30,8 @@ On the `protected-tunnel-handler` branch, `app/sentry-tunnel/route.ts` re-sends 
 from the server, to the DSN's host instead of the rewrite destination. The DSN there points at the
 echo endpoint (`https://<key>@dev.oioki.me/headers/4507`), so the handler posts to
 `https://dev.oioki.me/headers/api/4507/envelope/` and the echo still shows up as the tunnel response.
-That branch installs the PR build from `vendor/` (`@sentry/nextjs` 11.8.0).
+That branch installs the PR build from `vendor/` (`@sentry/nextjs` 11.8.0). The
+`protected-sdk-11.9.0` branch is the same setup on the released `@sentry/nextjs` 11.9.0.
 
 ## Run
 
